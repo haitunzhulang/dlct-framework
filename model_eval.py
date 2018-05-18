@@ -136,6 +136,8 @@ def model_evaluate_sequence(model_folder, results_root_folder, fnc_str = 'FCN_A'
 # 			pred_list.append(model.predict(X_val[k:k+1,:])/100)
 # 		preds = np.concatenate(pred_list, axis = 0)
 		preds_list = model.predict(X_val)
+		if not type(preds_list) is list:
+			preds_list = [preds_list]
 		mae_list = []
 		for preds in preds_list:
 			preds = preds/100

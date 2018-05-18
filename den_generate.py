@@ -1,3 +1,7 @@
+# script to generate density maps for MBM cell and synthetic bench mark data
+# by shenghua
+# date: April 27, 2018
+
 import numpy as np
 import os
 import matplotlib.pyplot as plt

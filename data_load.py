@@ -149,6 +149,35 @@ def load_train_data(val_version=21, cross_val = 0, normal_proc = False):
 		train_truths = Y_train
 		test_truths = Y_test
 
+	if val_version==26:
+		## load training data val_version: 26
+		# benchmark dataset 3
+		# CRCH_data_process.py
+		# gaussian sigma: 3.0	return train_data, test_data, train_truths, test_truths
+		train_data_folder = os.path.expanduser('~/dataset/bio_cell_data/train_data')
+		data_folder = 'cell_count_benchmark/CRCHistoPhenotypes_2016_04_28'
+		ptrn = os.path.join(train_data_folder, data_folder, '*.pkl')
+		file_names = glob.glob(ptrn)
+		X_list = []
+		Y_list = []
+		for fn in file_names:
+			X, _, Y = read_pickles(fn, keys = ['cell', 'annot', 'den'])
+			X_list.append(X)
+			Y_list.append(Y)
+		X_arr = np.array(X_list)
+		if normal_proc:
+			X_arr = (X_arr-np.mean(X_arr))/np.std(X_arr)
+		Y_arr = np.array(Y_list)
+		nb_train = int(len(X_list)*1/2)
+		X_train = X_arr[:nb_train]
+		Y_train = Y_arr[:nb_train]
+		X_test = X_arr[nb_train:]
+		Y_test = Y_arr[nb_train:]
+		train_data = X_train
+		test_data =  X_test
+		train_truths = Y_train
+		test_truths = Y_test
+
 	return train_data, test_data, train_truths, test_truths
 
 def load_unannotated_data(data_folder, cell_type = 'cdx2'):

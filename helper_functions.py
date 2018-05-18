@@ -355,20 +355,24 @@ def train_model_multi_task(model, X_train, X_val, Y_train, Y_val, nb_epochs=400,
 # 		print('\nepoch '+str(epochIdx)+'-> tr mse:'+str(tr_loss[-1])+', val mse:'+str(te_loss[-1])+'--')
 		plot_multi_loss(model.name, train_loss_dic, val_loss_dic)
 		save_train_multi_loss(model.name, train_loss_dic, val_loss_dic)
-		print(score[0])		
-		if (bs_mse>score[0])or(red1_mse>score[4])or(red2_mse>score[3])or(red4_mse>score[2]) or (red8_mse>score[1]):
-			if bs_mse >score[0]:
-				bs_mse = score[0]
-			if red1_mse>score[4]:
-				red1_mse = score[4]
-			if red2_mse>score[3]:
-				red2_mse = score[3]
-			if red4_mse>score[2]:
-				red4_mse = score[2]
-			if red8_mse>score[1]:
-				red8_mse = score[1]
+# 		print(score[0])
+		if red1_mse>score[4]:
+			red1_mse = score[4]
 			# save model weights
-			save_model_epoch_idx(model,model.name,epochIdx)
+			save_model_epoch_idx(model,model.name,epochIdx)	
+# 		if (bs_mse>score[0])or(red1_mse>score[4])or(red2_mse>score[3])or(red4_mse>score[2]) or (red8_mse>score[1]):
+# 			if bs_mse >score[0]:
+# 				bs_mse = score[0]
+# 			if red1_mse>score[4]:
+# 				red1_mse = score[4]
+# 			if red2_mse>score[3]:
+# 				red2_mse = score[3]
+# 			if red4_mse>score[2]:
+# 				red4_mse = score[2]
+# 			if red8_mse>score[1]:
+# 				red8_mse = score[1]
+# 			# save model weights
+# 			save_model_epoch_idx(model,model.name,epochIdx)
 			# save the validation results
 # 			img_idx=random.randint(0,valImages.shape[0]-1)
 # 			img_idx=random.sample(range(valImages.shape[0]),3)

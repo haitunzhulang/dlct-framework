@@ -18,11 +18,11 @@ def model_train(model, val_version = 21, cross_val =0, nb_epoch_per_record =2, n
 	Y_train = Y_train*100
 	Y_val = Y_val*100
 	# here is where we really train the model
-# 	hf.train_model_multi_task(model, X_train,X_val,Y_train,Y_val, nb_epochs=nb_epochs, nb_epoch_per_record=nb_epoch_per_record, input_shape=input_shape, batch_size = batch_size, lr_max = max_lr)
-	hf.train_model(model, X_train,X_val,Y_train,Y_val, nb_epochs=nb_epochs, nb_epoch_per_record=nb_epoch_per_record, input_shape=input_shape, batch_size = batch_size, lr_max = max_lr)
+	hf.train_model_multi_task(model, X_train,X_val,Y_train,Y_val, nb_epochs=nb_epochs, nb_epoch_per_record=nb_epoch_per_record, input_shape=input_shape, batch_size = batch_size, lr_max = max_lr)
+#	hf.train_model(model, X_train,X_val,Y_train,Y_val, nb_epochs=nb_epochs, nb_epoch_per_record=nb_epoch_per_record, input_shape=input_shape, batch_size = batch_size, lr_max = max_lr)
 
 if __name__ == '__main__':
-	os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+	os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 	config = tf.ConfigProto(gpu_options=tf.GPUOptions(allow_growth=True))
 	session = tf.Session(config=config)
 	K.set_session(session)
@@ -36,13 +36,13 @@ if __name__ == '__main__':
 # 	input_shape = (96,96)
 	input_shape = (128,128)
 	batch_size = 100
-	lr=0.005
+	lr=0.002
 	dropout = None
 	max_lr = 0.05
 	trial = 0
 # 	init = 'normal'
 # 	init = 'glorot_uniform'
-	date = '5.17'			  # date when we train the model
+	date = '5.18'			  # date when we train the model
 #	net_arch ='FCRN_A'		  # the baseline method
 #	net_arch ='URN'		      # the network that we create in models.py
 # 	net_arch ='U_Net_FCRN_A'
@@ -51,14 +51,15 @@ if __name__ == '__main__':
 # 	net_arch = 'imp_MCNN_U2'
 # 	net_arch = 'MCNN_U_x4'
 # 	net_arch = 'buildModel_FCRN_A'
-	net_arch = 'buildModel_InCep'
+# 	net_arch = 'buildModel_InCep'
 # 	net_arch = 'buildModel_InCep_v2'
-# 	net_arch = 'buildMultiModel_FCRN_A'
+	net_arch = 'buildMultiModel_FCRN_A'
 # 	net_arch = 'buildMultiModel_InCep'
 # 	net_arch = 'buildModel_MCNN_U'
 	fcns = globals()[net_arch]
-	val_version = 24	# benchmark 0: synthetic data
+# 	val_version = 24	# benchmark 0: synthetic data
 # 	val_version = 25	# benchmark 1: synthetic data
+	val_version = 26	# benchmark 1: synthetic data
 	loss_fn = 'mse'
 # 	loss_fn = 'mae'
 # 	loss_fn = 'mean_squared_error'
