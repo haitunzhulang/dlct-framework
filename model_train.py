@@ -22,7 +22,7 @@ def model_train(model, val_version = 21, cross_val =0, nb_epoch_per_record =2, n
 #	hf.train_model(model, X_train,X_val,Y_train,Y_val, nb_epochs=nb_epochs, nb_epoch_per_record=nb_epoch_per_record, input_shape=input_shape, batch_size = batch_size, lr_max = max_lr)
 
 if __name__ == '__main__':
-	os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+	os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 	config = tf.ConfigProto(gpu_options=tf.GPUOptions(allow_growth=True))
 	session = tf.Session(config=config)
 	K.set_session(session)
@@ -50,10 +50,10 @@ if __name__ == '__main__':
 # 	net_arch = 'MCNN_U'
 # 	net_arch = 'imp_MCNN_U2'
 # 	net_arch = 'MCNN_U_x4'
-# 	net_arch = 'buildModel_FCRN_A'
+	net_arch = 'buildModel_FCRN_A'
 # 	net_arch = 'buildModel_InCep'
 # 	net_arch = 'buildModel_InCep_v2'
-	net_arch = 'buildMultiModel_FCRN_A'
+#	net_arch = 'buildMultiModel_FCRN_A'
 # 	net_arch = 'buildMultiModel_InCep'
 # 	net_arch = 'buildModel_MCNN_U'
 	fcns = globals()[net_arch]
