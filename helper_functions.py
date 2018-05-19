@@ -17,20 +17,22 @@ def generate_folder(folder):
 
 # plot and save the file
 def plot_loss(model_name,loss,val_loss):
-    generate_folder(model_name)
-    f_out=model_name+'/loss_epochs.png'
-    from matplotlib.backends.backend_agg import FigureCanvasAgg
-    from matplotlib.figure import Figure
-    fig = Figure(figsize=(8,6))
-    ax = fig.add_subplot(1,1,1)
-    ax.plot(loss,'b-',linewidth=1.3)
-    ax.plot(val_loss,'r-',linewidth=1.3)
-    ax.set_title('Model Loss')
-    ax.set_ylabel('MSE')
-    ax.set_xlabel('epochs')
-    ax.legend(['train', 'test'], loc='upper left')  
-    canvas = FigureCanvasAgg(fig)
-    canvas.print_figure(f_out, dpi=80)
+	generate_folder(model_name)
+	f_out=model_name+'/loss_epochs.png'
+	from matplotlib.backends.backend_agg import FigureCanvasAgg
+	from matplotlib.figure import Figure
+	start_idx = 4
+	if len(loss)>start_idx:
+		fig = Figure(figsize=(8,6))
+		ax = fig.add_subplot(1,1,1)
+		ax.plot(loss[start_idx:],'b-',linewidth=1.3)
+		ax.plot(val_loss[start_idx:],'r-',linewidth=1.3)
+		ax.set_title('Model Loss')
+		ax.set_ylabel('MSE')
+		ax.set_xlabel('epochs')
+		ax.legend(['train', 'test'], loc='upper left')  
+		canvas = FigureCanvasAgg(fig)
+		canvas.print_figure(f_out, dpi=80)
 
 def plot_multi_loss(model_name,train_loss_dic,val_loss_dic):
 	from matplotlib.backends.backend_agg import FigureCanvasAgg
@@ -38,7 +40,7 @@ def plot_multi_loss(model_name,train_loss_dic,val_loss_dic):
 	generate_folder(model_name)
 	f_out=model_name+'/loss_epochs.png'
 	if (len(train_loss_dic['loss'])>4):
-		fig = Figure(figsize=(12,8))
+		fig = Figure(figsize=(14,8))
 		ax = fig.add_subplot(2,3,1)
 		ax.plot(train_loss_dic['loss'],'b-',linewidth=1.3)
 		ax.plot(val_loss_dic['loss'],'r-',linewidth=1.3)
@@ -351,7 +353,7 @@ def train_model_multi_task(model, X_train, X_val, Y_train, Y_val, nb_epochs=400,
 		val_loss_dic['red2'].append(score[3])
 		val_loss_dic['red4'].append(score[2])
 		val_loss_dic['red8'].append(score[1])
-# 		print('\nepoch:{0}=> tr mse:{1:.6f}, val mse:{2:.6f}, lr:{3:.4f}'.format(epochIdx,tr_loss[-1],te_loss[-1],K.get_value(model.optimizer.lr)))
+		print('\nepoch:{0}=> tr mse:{1:.6f}, val mse:{2:.6f}, lr:{3:.4f}'.format(epochIdx,train_loss_dic['loss'][-1],val_loss_dic['loss'][-1],K.get_value(model.optimizer.lr)))
 # 		print('\nepoch '+str(epochIdx)+'-> tr mse:'+str(tr_loss[-1])+', val mse:'+str(te_loss[-1])+'--')
 		plot_multi_loss(model.name, train_loss_dic, val_loss_dic)
 		save_train_multi_loss(model.name, train_loss_dic, val_loss_dic)
@@ -374,13 +376,12 @@ def train_model_multi_task(model, X_train, X_val, Y_train, Y_val, nb_epochs=400,
 # 			# save model weights
 # 			save_model_epoch_idx(model,model.name,epochIdx)
 			# save the validation results
-# 			img_idx=random.randint(0,valImages.shape[0]-1)
-# 			img_idx=random.sample(range(valImages.shape[0]),3)
-# 			image_arr = np.squeeze(valImages[img_idx,:])
-# 			den_arr = np.squeeze(valDensityMaps[img_idx,:])/100
-# 			est_arr = model.predict(valImages[img_idx,:])/100
-# 			save_val_results(model.name,(8,8),image_arr,den_arr, np.squeeze(est_arr), epochIdx)
-# 			save_val_results(model.name,image,gt,np.squeeze(est),epochIdx)
+			img_idx=random.randint(0,valImages.shape[0]-1)
+			img_idx=random.sample(range(valImages.shape[0]),3)
+			image_arr = np.squeeze(valImages[img_idx,:])
+			den_arr = np.squeeze(valDensityMaps[img_idx,:])/100
+			est_arr = model.predict(valImages[img_idx,:])[-1]/100
+			save_val_results(model.name,(8,8),image_arr,den_arr, np.squeeze(est_arr), epochIdx)
 # 			bs_mse=score[0]
 		# make prediction
 # 		if is_mae:

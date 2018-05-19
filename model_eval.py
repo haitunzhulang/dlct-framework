@@ -94,7 +94,8 @@ def model_evaluate_sequence(model_folder, results_root_folder, fnc_str = 'FCN_A'
 	mae_list = []
 	std_list = []
 # 	input_shape = (608,608)
-	input_shape = (256,256)
+# 	input_shape = (256,256)
+	input_shape = (500,500)
 	model = fcns(input_shape)
 	best_err = float('inf')
 	best_indx = 0
@@ -128,16 +129,21 @@ def model_evaluate_sequence(model_folder, results_root_folder, fnc_str = 'FCN_A'
 			X_val = X_val.reshape(X_val.shape+(1,))
 		time1 = time.time()
 		x_len = X_val.shape[0]
-# 		preds = model.predict(X_val[:int(x_len/3),:])/100
-# 		preds1 = model.predict(X_val[int(x_len/3):int(x_len*2/3),:])/100
-# 		preds2 = model.predict(X_val[int(x_len*2/3):,:])/100
+		preds = model.predict(X_val[:int(x_len/3),:])
+		preds1 = model.predict(X_val[int(x_len/3):int(x_len*2/3),:])
+		preds2 = model.predict(X_val[int(x_len*2/3):,:])
+		if type(preds) is list:
+			preds_list = [np.concatenate([preds[0],preds1[0],preds2[0]], axis = 0), np.concatenate([preds[1],preds1[1],preds2[1]], axis = 0),
+							np.concatenate([preds[2],preds1[2],preds2[2]], axis = 0), np.concatenate([preds[3],preds1[3],preds2[3]], axis = 0)]
+		else:
+			preds_list = [np.concatenate([preds,preds1,preds2], axis = 0)]
 # 		pred_list = []
 # 		for k in range(x_len):
 # 			pred_list.append(model.predict(X_val[k:k+1,:])/100)
 # 		preds = np.concatenate(pred_list, axis = 0)
-		preds_list = model.predict(X_val)
-		if not type(preds_list) is list:
-			preds_list = [preds_list]
+# 		preds_list = model.predict(X_val)
+# 		if not type(preds_list) is list:
+# 			preds_list = [preds_list]
 		mae_list = []
 		for preds in preds_list:
 			preds = preds/100
@@ -196,7 +202,7 @@ def read_result_pkl(file_name,acc_list, mae_list, std_list, keys = ['acc', 'mae'
 	return read_pickles(file_name, keys = ['acc', 'mae', 'std'])
 
 if __name__ == '__main__':
-	os.environ["CUDA_VISIBLE_DEVICES"] = "4"
+	os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 	keras.losses.mse_err = mse_err
 	keras.losses.mse_ct_err = mse_ct_err
 	## the parameters
@@ -208,11 +214,12 @@ if __name__ == '__main__':
 # 	fnc_str = 'MCNN'
 # 	fnc_str = 'MCNN_U'
 # 	fnc_str = 'imp_MCNN_U2'
-# 	fnc_str = 'buildModel_FCRN_A'
+	fnc_str = 'buildModel_FCRN_A'
 	fnc_str = 'buildMultiModel_FCRN_A'
 # 	fnc_str = 'buildMultiModel_InCep'
 # 	fnc_str = 'buildModel_InCep'
 # 	fnc_str = 'buildModel_InCep_v2'
+# 	fnc_str = 'buildModel_FCRN_A_v2'
 # 	fnc_str = 'buildModel_MCNN_U'
 # 	fnc_str = 'MCNN_U_x4'
 # 	loss_fn = 'mse_ct_err'
@@ -225,10 +232,11 @@ if __name__ == '__main__':
 # 	date = '5.4'
 # 	date = '5.9'
 # 	date = '5.6'
-	date = '5.17'
+	date = '5.18'
 # 	date = '5.6'
-	data_version = 24
+# 	data_version = 24
 # 	data_version = 25
+	data_version = 26
 # 	model_folder = os.path.join(models_root_folder,'date-4.27-FCRN_A-mse_err-v-24-cross-0-batch-320-lr-0.001-r-0')
 # 	model_evaluate(model_folder, results_root_folder, fnc_str = fnc_str)
 # 	model_folders_ptrn = 'date-{}-{}-mse*v-{}*'.format(date,fnc_str,data_version)
